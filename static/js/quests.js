@@ -6,7 +6,7 @@ const QUESTS = [
   // 1. Гренни
   {
     id: "granny",
-    name: "Бабушка Гренни",
+    name: "Бабушка Грэнни",
     genre: "Хоррор / Побег",
     tag: "ХИТ",
     tagColor: "#8B4513",
