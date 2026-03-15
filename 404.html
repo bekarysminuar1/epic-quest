@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Вы зашли не в ту дверь | Epic Quest Astana</title>
+  <link rel="stylesheet" href="static/css/main.css" />
+  <link rel="icon" type="image/webp" href="static/img/logo.webp" />
+  <style>
+    .page-404 {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-404__bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 50%, rgba(100,0,0,.18) 0%, transparent 70%),
+        linear-gradient(160deg, #040404 0%, #0b0000 50%, #040404 100%);
+    }
+    .page-404__grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(139,0,0,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139,0,0,.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .page-404__content {
+      position: relative; z-index: 2;
+      animation: fadeUp .8s ease both;
+    }
+    .page-404__code {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(7rem, 22vw, 14rem);
+      font-weight: 700;
+      line-height: 1;
+      color: var(--blood);
+      text-shadow: 0 0 80px rgba(139,0,0,.6), 0 0 120px rgba(139,0,0,.3);
+      letter-spacing: 8px;
+      margin-bottom: 0;
+    }
+    .page-404__title {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(1.4rem, 4vw, 2.4rem);
+      font-weight: 600;
+      letter-spacing: 3px;
+      color: #fff;
+      margin: 10px 0 20px;
+      text-transform: uppercase;
+    }
+    .page-404__desc {
+      font-size: clamp(.9rem, 2.5vw, 1.1rem);
+      color: #666;
+      font-style: italic;
+      line-height: 1.8;
+      max-width: 520px;
+      margin: 0 auto 40px;
+    }
+    .page-404__desc span {
+      color: var(--blood2);
+      font-style: normal;
+      font-weight: 600;
+    }
+    .page-404__divider {
+      width: 60px; height: 2px;
+      background: var(--blood);
+      margin: 0 auto 30px;
+    }
+    .page-404__btn {
+      display: inline-block;
+      background: var(--blood);
+      color: #fff;
+      font-family: 'Oswald', sans-serif;
+      font-size: .95rem;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 16px 48px;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 30px rgba(139,0,0,.35);
+    }
+    .page-404__btn:hover {
+      background: var(--blood2);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 40px rgba(204,17,17,.45);
+    }
+    .page-404__hint {
+      margin-top: 24px;
+      font-size: .75rem;
+      color: #333;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-404">
+    <div class="page-404__bg" aria-hidden="true">
+      <div class="page-404__grid"></div>
+    </div>
+    <div class="page-404__content">
+      <div class="page-404__code">404</div>
+      <h1 class="page-404__title">Вы зашли не в ту дверь</h1>
+      <div class="page-404__divider" aria-hidden="true"></div>
+      <p class="page-404__desc">
+        Эта страница исчезла в темноте.<br>
+        Или её никогда не существовало...<br>
+        <span>Выход отсюда только один.</span>
+      </p>
+      <a href="index.html" class="page-404__btn">← Вернуться на главную</a>
+      <p class="page-404__hint">Epic Quest Astana · С 2016 года</p>
+    </div>
+  </div>
+</body>
+</html>

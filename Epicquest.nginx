@@ -1,0 +1,50 @@
+# Epic Quest Astana — Nginx конфигурация
+# Подключить: include /path/to/epicquest.nginx.conf;
+
+server {
+    listen 80;
+    server_name epicquest.kz www.epicquest.kz;
+    root /var/www/epicquest;
+    index index.html;
+
+    # ── Редирект на HTTPS ──
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name epicquest.kz www.epicquest.kz;
+    root /var/www/epicquest;
+    index index.html;
+
+    # ── 404 страница ──
+    error_page 404 /404.html;
+    location = /404.html {
+        internal;
+    }
+
+    # ── Убрать .html из URL ──
+    location / {
+        try_files $uri $uri.html $uri/ =404;
+    }
+
+    # ── Кэширование статики ──
+    location ~* \.(jpg|jpeg|png|webp|gif|ico|svg)$ {
+        expires 1M;
+        add_header Cache-Control "public, immutable";
+    }
+    location ~* \.(css|js)$ {
+        expires 1w;
+        add_header Cache-Control "public";
+    }
+
+    # ── Сжатие ──
+    gzip on;
+    gzip_types text/html text/css application/javascript image/svg+xml;
+    gzip_min_length 1024;
+
+    # ── Безопасность ──
+    add_header X-Content-Type-Options "nosniff";
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header Referrer-Policy "strict-origin-when-cross-origin";
+}

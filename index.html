@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Epic Quest Astana — Квесты в реальности | Хоррор квесты Астана</title>
+  <meta name="description" content="Epic Quest Astana — хоррор квесты с живыми актёрами. 8 квестов, от 14 000 тг. Работаем с 2016 года. Полтергейст, Пила, Игра в кальмара и другие. Забронировать: 8 (778) 283-66-70" />
+  <meta name="keywords" content="квест Астана, хоррор квест, комната страха, escape room Астана, день рождения квест" />
+  <meta property="og:title" content="Epic Quest Astana — Хоррор квесты с живыми актёрами" />
+  <meta property="og:description" content="8 хоррор-квестов в Астане с живыми актёрами. От 14 000 тг. Полтергейст, Пила, Гренни, ОСД и другие. Работаем с 2016 года." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://epicquest.kz/static/img/og-cover.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:url" content="https://epicquest.kz/" />
+  <meta property="og:locale" content="ru_RU" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Epic Quest Astana — Хоррор квесты" />
+  <meta name="twitter:description" content="8 хоррор-квестов с живыми актёрами в Астане. От 14 000 тг." />
+  <meta name="twitter:image" content="https://epicquest.kz/static/img/og-cover.jpg" />
+  <link rel="stylesheet" href="static/css/main.css" />
+  <link rel="icon" type="image/png" href="static/img/logo.png" />
+  <style>
+    /* ── КНОПКА «ЗАБРОНИРОВАТЬ» В НАВБАРЕ — триггерная красная ── */
+    .btn-book-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #e01010 0%, #b30000 100%);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-family: 'Oswald', sans-serif;
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 11px 24px;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 0 20px rgba(220,20,20,.55), 0 2px 8px rgba(0,0,0,.4);
+      white-space: nowrap;
+      animation: bookPulse 2s ease-in-out infinite;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-book-nav::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .btn-book-nav:hover {
+      background: linear-gradient(135deg, #ff2020 0%, #cc0000 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 0 32px rgba(255,30,30,.7), 0 4px 16px rgba(0,0,0,.5);
+    }
+    .btn-book-nav:active {
+      transform: scale(.96);
+    }
+    @keyframes bookPulse {
+      0%, 100% { box-shadow: 0 0 16px rgba(220,20,20,.45), 0 2px 8px rgba(0,0,0,.4); }
+      50%       { box-shadow: 0 0 36px rgba(255,30,30,.8), 0 2px 8px rgba(0,0,0,.4); }
+    }
+
+    /* ── Пакеты ДР: яркие фоны карточек ── */
+    .pkg-card {
+      position: relative;
+      overflow: hidden;
+    }
+    .pkg-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(139,0,0,.12) 0%, rgba(30,0,0,.06) 100%);
+      pointer-events: none;
+    }
+    .pkg-card-gold::before {
+      background: linear-gradient(135deg, rgba(201,168,76,.14) 0%, rgba(60,40,0,.06) 100%);
+    }
+    .pkg-card-legend::before {
+      background: linear-gradient(135deg, rgba(155,89,182,.16) 0%, rgba(30,0,40,.06) 100%);
+    }
+
+    /* ── pkg-meta: доп. места на новой строке ── */
+    .pkg-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .pkg-meta-extra {
+      color: #c9a84c;
+      font-weight: 600;
+      font-size: .8rem;
+    }
+
+    /* ── Карточки квестов: object-position для правильного кадрирования ── */
+    #questsGrid .qcard-img img[src*="pila"] { object-position: center 20%; }
+    #questsGrid .qcard-img img[src*="osd"]  { object-position: center 15%; }
+
+    /* hero-value-prop убран */
+    .hero-value-prop { display: none !important; }
+
+    /* ══════════════════════════════
+       COUNTER ANIMATION
+    ══════════════════════════════ */
+    .hero-stat span { transition: none; }
+    .hero-stat.counting span { opacity: .7; }
+
+    /* ══════════════════════════════
+       SCROLL REVEAL
+    ══════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
+
+    /* ══════════════════════════════
+       SECTION WAVE DIVIDERS
+    ══════════════════════════════ */
+    .wave-divider {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      margin: 0;
+    }
+    .wave-divider svg {
+      display: block;
+      width: 100%;
+      height: 60px;
+    }
+
+    /* ══════════════════════════════
+       TYPOGRAPHY — QUEST PAGE LEDE
+    ══════════════════════════════ */
+    .qpage-desc p:first-child {
+      font-size: 1.08rem;
+      color: #bbb;
+      line-height: 1.75;
+      font-weight: 400;
+      margin-bottom: 18px;
+    }
+    .qpage-desc p:first-child::first-letter {
+      float: left;
+      font-family: 'Oswald', sans-serif;
+      font-size: 3.8rem;
+      font-weight: 700;
+      line-height: .75;
+      padding: 4px 10px 0 0;
+      color: var(--blood2);
+    }
+
+    /* ══════════════════════════════
+       BOTTOM-SHEET BOOKING (MOBILE)
+    ══════════════════════════════ */
+    .bottom-sheet-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      background: rgba(0,0,0,.7);
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0;
+    }
+    .bottom-sheet-overlay.active { display: flex; }
+
+    .bottom-sheet {
+      background: #1a1a1a;
+      width: 100%;
+      max-width: 540px;
+      max-height: 92vh;
+      overflow-y: auto;
+      border-radius: 20px 20px 0 0;
+      border-top: 3px solid var(--blood);
+      transform: translateY(100%);
+      transition: transform .35s cubic-bezier(.32,1,.5,1);
+      padding-bottom: env(safe-area-inset-bottom, 16px);
+    }
+    .bottom-sheet-overlay.active .bottom-sheet {
+      transform: translateY(0);
+    }
+    .bottom-sheet-handle {
+      width: 40px; height: 4px;
+      background: #444;
+      border-radius: 2px;
+      margin: 12px auto 0;
+    }
+    .bottom-sheet::-webkit-scrollbar { width: 3px; }
+    .bottom-sheet::-webkit-scrollbar-thumb { background: var(--blood); }
+
+    /* Десктоп — bottom-sheet → обычная модалка */
+    @media (min-width: 600px) {
+      .bottom-sheet-overlay { align-items: center; padding: 16px; }
+      .bottom-sheet {
+        border-radius: 0;
+        max-height: 90vh;
+        border: 1px solid #2a2a2a;
+        border-top: 2px solid var(--blood);
+        transform: translateY(24px);
+        opacity: 0;
+        transition: transform .3s ease, opacity .3s ease;
+      }
+      .bottom-sheet-overlay.active .bottom-sheet {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      .bottom-sheet-handle { display: none; }
+    }
+
+    /* ══════════════════════════════
+       STICKY BOOK BTN (quest page, mobile)
+    ══════════════════════════════ */
+    .sticky-book-bar {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 1500;
+      padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+      background: linear-gradient(to top, rgba(4,4,4,.98) 60%, transparent);
+    }
+    @media (max-width: 680px) {
+      .sticky-book-bar { display: block; }
+    }
+    .sticky-book-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #e01010 0%, #b30000 100%);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 16px;
+      border-radius: 4px;
+      box-shadow: 0 0 28px rgba(220,20,20,.5);
+      animation: bookPulse 2s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ПЛАВАЮЩИЕ КНОПКИ -->
+<div class="float-btns">
+  <a href="https://wa.me/77782836670?text=%D0%A5%D0%BE%D1%87%D1%83%20%D1%81%D1%8B%D0%B3%D1%80%D0%B0%D1%82%D1%8C%20%F0%9F%98%88"
+     target="_blank" rel="noopener" class="float-btn float-wa" title="WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+  </a>
+  <a href="https://www.instagram.com/epic_quest_kz" target="_blank" rel="noopener" class="float-btn float-ig" title="Instagram">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+  </a>
+</div>
+
+<!-- ═══ НАВИГАЦИЯ ═══ -->
+<nav id="navbar" role="navigation" aria-label="Главное меню">
+  <a href="index.html" class="logo" aria-label="Epic Quest — на главную">
+    <img src="static/img/logo.webp" alt="Epic Quest Astana" class="logo-img" width="160" height="50" />
+  </a>
+  <ul class="nav-links">
+    <li><a href="#quests">Квесты</a></li>
+    <li><a href="#packages">Дни рождения</a></li>
+    <li><a href="#about">О нас</a></li>
+    <li><a href="#contacts">Контакты</a></li>
+    <li><a href="oferta.html">Оферта</a></li>
+  </ul>
+  <button class="burger" id="burgerBtn" aria-label="Меню" aria-expanded="false">
+    <span class="burger__line"></span>
+    <span class="burger__line"></span>
+    <span class="burger__line"></span>
+  </button>
+  <div class="nav-mobile" id="navMobile" role="navigation" aria-label="Мобильное меню">
+    <ul class="nav-mobile__list">
+      <li><a href="#quests">Квесты</a></li>
+      <li><a href="#packages">Дни рождения</a></li>
+      <li><a href="#about">О нас</a></li>
+      <li><a href="#contacts">Контакты</a></li>
+      <li><a href="oferta.html">Оферта</a></li>
+    </ul>
+    <div class="nav-mobile__socials">
+      <a href="https://www.instagram.com/epic_quest_kz" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <a href="https://t.me/epic_rules" target="_blank" rel="noopener" aria-label="Telegram">
+        <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      </a>
+      <a href="https://wa.me/77782836670?text=%D0%A5%D0%BE%D1%87%D1%83%20%D1%81%D1%8B%D0%B3%D1%80%D0%B0%D1%82%D1%8C%20%F0%9F%98%88" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-socials" aria-label="Социальные сети">
+      <a href="https://www.instagram.com/epic_quest_kz" target="_blank" rel="noopener" title="Instagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <a href="https://t.me/epic_rules" target="_blank" rel="noopener" title="Telegram">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      </a>
+      <a href="https://wa.me/77782836670?text=%D0%A5%D0%BE%D1%87%D1%83%20%D1%81%D1%8B%D0%B3%D1%80%D0%B0%D1%82%D1%8C%20%F0%9F%98%88" target="_blank" rel="noopener" title="WhatsApp">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+      </a>
+    </div>
+    <!-- ✅ ЗЕЛЁНАЯ ТРИГГЕРНАЯ КНОПКА «ЗАБРОНИРОВАТЬ» -->
+    <button class="btn-book-nav" onclick="location.href='#quests'" aria-label="Забронировать квест">
+      🔥 Забронировать
+    </button>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" aria-label="Главный экран">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-glow"></div>
+    <div class="hero-grid"></div>
+  </div>
+  <div class="hero-content">
+    <p class="hero-tag">Астана · на рынке с 2016 года, построили 22 квеста</p>
+
+    <h1 class="hero-title">EPIC<br><span class="hero-title-red">QUEST</span></h1>
+    <p class="hero-sub">Выпусти свои страхи наружу</p>
+    <div class="hero-stats" aria-label="Наши достижения">
+      <div class="hero-stat"><span data-count="8" data-suffix="">8</span><small>Квестов</small></div>
+      <div class="hero-stat-divider" aria-hidden="true"></div>
+      <div class="hero-stat"><span data-count="10" data-suffix="+">10+</span><small>Лет работы</small></div>
+      <div class="hero-stat-divider" aria-hidden="true"></div>
+      <div class="hero-stat"><span data-count="100" data-suffix="К+">100К+</span><small>Игроков</small></div>
+    </div>
+    <div class="hero-btns">
+      <a href="#quests" class="btn-hero">Выбрать квест</a>
+      <a href="#packages" class="btn-hero btn-hero-secondary">Пакеты дня рождения</a>
+    </div>
+  </div>
+</section>
+
+<!-- WAVE: hero → quests -->
+<div class="wave-divider" style="background:var(--d1); margin-top:-2px;">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 C360,60 1080,60 1440,0 L1440,60 L0,60 Z" fill="#040404"/>
+  </svg>
+</div>
+
+<!-- ═══ КВЕСТЫ ═══ -->
+<section id="quests" class="section-quests" aria-label="Наши квесты">
+  <div class="section-header reveal">
+    <span class="section-tag">Наши квесты</span>
+    <h2 class="section-title">ВЫБЕРИ СВОЙ УЖАС</h2>
+  </div>
+  <div class="quests-grid" id="questsGrid" role="list"></div>
+</section>
+
+<!-- WAVE: quests → packages -->
+<div class="wave-divider" style="background:var(--void);">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,60 C480,0 960,0 1440,60 L1440,60 L0,60 Z" fill="#0e0e0e"/>
+  </svg>
+</div>
+
+<!-- ═══ ПАКЕТЫ ДНЯ РОЖДЕНИЯ ═══ -->
+<section id="packages" class="section-packages" aria-label="Пакеты на день рождения">
+  <div class="section-header reveal">
+    <span class="section-tag">Для именинников</span>
+    <h2 class="section-title">ПАКЕТЫ НА ДЕНЬ РОЖДЕНИЯ</h2>
+  </div>
+  <div class="promo-banner" role="alert">
+    <span class="promo-icon" aria-hidden="true">🎉</span>
+    <div>
+      <strong>Именинник играет БЕСПЛАТНО!</strong>
+      <p>При группе от 5 человек. Акция действует ±2 дня от даты рождения. При себе иметь документ, подтверждающий дату рождения.</p>
+    </div>
+  </div>
+  <div class="packages-grid">
+
+    <!-- ПРАЙМ -->
+    <div class="pkg-card pkg-card-gold">
+      <div class="pkg-header">ПАКЕТ: ПРАЙМ</div>
+      <ul class="pkg-list">
+        <li>Квест «Очень Странные Дела 2»</li>
+        <li>Квест «Бабушка Грэнни»</li>
+        <li>Настольные игры</li>
+        <li>Эпичный вынос торта</li>
+        <li>Фуршет с вашей едой</li>
+        <li>Электронные пригласительные</li>
+        <li>Полная аренда 3-х этажного коттеджа</li>
+        <li>Мобилограф</li>
+      </ul>
+      <div class="pkg-meta">
+        <span>Длительность: 3 часа · До 10 чел</span>
+        <span class="pkg-meta-extra">➕ Доп. места: 5 000 тг/чел</span>
+      </div>
+      <div class="pkg-prices">
+        <div class="pkg-price-row">Будние: <strong>99 000 тг</strong></div>
+        <div class="pkg-price-row pkg-weekend">Выходные: <strong>120 000 тг</strong></div>
+      </div>
+      <button class="btn-pkg" onclick="openPackageModal('ПРАЙМ')">Забронировать</button>
+    </div>
+
+    <!-- ЛЕГЕНДА -->
+    <div class="pkg-card pkg-card-legend">
+      <div class="pkg-header">ПАКЕТ: ЛЕГЕНДА</div>
+      <ul class="pkg-list">
+        <li>Квест «Очень Странные Дела 2»</li>
+        <li>Квест «Бабушка Грэнни»</li>
+        <li>Шоу программа с ведущим и ди-джеем — 6 весёлых игр от @epik_show</li>
+        <li>Настольные игры, Мафия, Прятки в темноте</li>
+        <li>Эпичное поздравление / вынос торта</li>
+        <li>Фуршет с вашей едой</li>
+        <li>Электронные пригласительные</li>
+        <li>Полная аренда 3-х этажного коттеджа</li>
+        <li>Мобилограф</li>
+      </ul>
+      <div class="pkg-meta">
+        <span>Длительность: 4 часа · До 15 чел</span>
+        <span class="pkg-meta-extra">➕ Доп. места: 7 500 тг/чел</span>
+      </div>
+      <div class="pkg-prices">
+        <div class="pkg-price-row">Будние: <strong>130 000 тг</strong></div>
+        <div class="pkg-price-row pkg-weekend">Выходные: <strong>180 000 тг</strong></div>
+      </div>
+      <button class="btn-pkg" onclick="openPackageModal('ЛЕГЕНДА')">Забронировать</button>
+    </div>
+
+    <!-- ПОЛТЕР -->
+    <div class="pkg-card">
+      <div class="pkg-header">ПАКЕТ: ПОЛТЕР</div>
+      <ul class="pkg-list">
+        <li>Квест «Полтергейст»</li>
+        <li>Квест «Побег из Астрала»</li>
+        <li>Настольные игры</li>
+        <li>Эпичный вынос торта</li>
+        <li>Электронные пригласительные</li>
+        <li>Полная аренда помещения</li>
+        <li>Мобилограф</li>
+      </ul>
+      <div class="pkg-meta">
+        <span>Длительность: 3 часа · До 15 чел</span>
+      </div>
+      <div class="pkg-prices">
+        <div class="pkg-price-row">Будние: <strong>89 000 тг</strong></div>
+        <div class="pkg-price-row pkg-weekend">Выходные: <strong>110 000 тг</strong></div>
+      </div>
+      <button class="btn-pkg" onclick="openPackageModal('ПОЛТЕР')">Забронировать</button>
+    </div>
+
+    <!-- ПИЛА -->
+    <div class="pkg-card">
+      <div class="pkg-header">ПАКЕТ: ПИЛА</div>
+      <ul class="pkg-list">
+        <li>Квест «Пила»</li>
+        <li>Настольные игры</li>
+        <li>Эпичный вынос торта</li>
+        <li>Электронные пригласительные</li>
+        <li>Полная аренда помещения</li>
+        <li>Мобилограф</li>
+      </ul>
+      <div class="pkg-meta">
+        <span>Длительность: 2 часа · До 10 чел</span>
+      </div>
+      <div class="pkg-prices">
+        <div class="pkg-price-row">Будние: <strong>56 000 тг</strong></div>
+        <div class="pkg-price-row pkg-weekend">Выходные: <strong>70 000 тг</strong></div>
+      </div>
+      <button class="btn-pkg" onclick="openPackageModal('ПИЛА')">Забронировать</button>
+    </div>
+
+    <!-- МТ -->
+    <div class="pkg-card">
+      <div class="pkg-header">ПАКЕТ: МТ</div>
+      <ul class="pkg-list">
+        <li>Квест «Мрачные Традиции»</li>
+        <li>Настольные игры</li>
+        <li>Эпичный вынос торта</li>
+        <li>Электронные пригласительные</li>
+        <li>Полная аренда помещения</li>
+        <li>Мобилограф</li>
+      </ul>
+      <div class="pkg-meta">
+        <span>Длительность: 2 часа · До 7 чел</span>
+      </div>
+      <div class="pkg-prices">
+        <div class="pkg-price-row">Будние: <strong>56 000 тг</strong></div>
+        <div class="pkg-price-row pkg-weekend">Выходные: <strong>70 000 тг</strong></div>
+      </div>
+      <button class="btn-pkg" onclick="openPackageModal('МТ')">Забронировать</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- WAVE: packages → about -->
+<div class="wave-divider" style="background:var(--void);">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 C360,60 1080,60 1440,0 L1440,60 L0,60 Z" fill="#040404"/>
+  </svg>
+</div>
+
+<!-- ═══ О НАС ═══ -->
+<section id="about" class="section-about" aria-label="О компании">
+  <div class="about-inner">
+    <div class="about-text reveal">
+      <span class="section-tag">О нас</span>
+      <h2 class="section-title">EPIC QUEST<br><span style="color:var(--blood2)">С 2016 ГОДА</span></h2>
+      <p>Мы создаём квесты, которые остаются в памяти навсегда. Каждый сценарий — это уникальный опыт с профессиональными актёрами, атмосферными декорациями и захватывающим сюжетом.</p>
+      <p style="margin-top:14px">Расположены в сердце Астаны. Работаем ежедневно с 10:00 до 03:00.</p>
+      <div class="about-badges">
+        <div class="about-badge">Живые актёры</div>
+        <div class="about-badge">Возраст от 9 лет</div>
+        <div class="about-badge">До 20 игроков</div>
+        <div class="about-badge">50 минут</div>
+      </div>
+    </div>
+    <div class="about-img-col reveal reveal-delay-2">
+      <div class="about-img-box">
+        <img src="https://images.unsplash.com/photo-1605806616949-1e87b487fc2f?w=600&q=80" alt="Команда Epic Quest Astana" loading="lazy" />
+        <div class="about-img-label">Epic Quest Astana</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WAVE: about → contacts -->
+<div class="wave-divider" style="background:var(--d1);">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,60 C480,0 960,0 1440,60 L1440,60 L0,60 Z" fill="#161616"/>
+  </svg>
+</div>
+
+<!-- ═══ КОНТАКТЫ ═══ -->
+<section id="contacts" class="section-contacts" aria-label="Контакты">
+  <div class="section-header reveal">
+    <span class="section-tag">Связь</span>
+    <h2 class="section-title">КОНТАКТЫ</h2>
+  </div>
+  <div class="contacts-grid">
+    <div class="contact-card">
+      <div class="contact-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
+      <div class="contact-label">Телефон / WhatsApp</div>
+      <a href="tel:+77782836670" class="contact-val">8 (778) 283-66-70</a>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+      <div class="contact-label">Режим работы</div>
+      <span class="contact-val">Ежедневно 10:00–03:00</span>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </div>
+      <div class="contact-label">Instagram</div>
+      <a href="https://www.instagram.com/epic_quest_kz" target="_blank" rel="noopener" class="contact-val">@epic_quest_kz</a>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
+      <div class="contact-label">Telegram</div>
+      <a href="https://t.me/epic_rules" target="_blank" rel="noopener" class="contact-val">@epic_rules</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ФУТЕР ═══ -->
+<footer role="contentinfo">
+  <div class="footer-left">
+    <img src="static/img/logo.webp" alt="Epic Quest Astana" class="logo-img" width="160" height="50" />
+    <p>© 2016–2026 Epic Quest Astana</p>
+  </div>
+  <div class="footer-socials" aria-label="Социальные сети">
+    <a href="https://www.instagram.com/epic_quest_kz" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+    <a href="https://t.me/epic_rules" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+    <a href="https://wa.me/77782836670?text=%D0%A5%D0%BE%D1%87%D1%83%20%D1%81%D1%8B%D0%B3%D1%80%D0%B0%D1%82%D1%8C%20%F0%9F%98%88" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a>
+  </div>
+  <div class="footer-right">
+    <a href="oferta.html">Публичная оферта</a>
+  </div>
+</footer>
+
+<!-- ═══ МОДАЛКА БРОНИРОВАНИЯ ═══ -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalQuestName">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <p class="modal-tag">Бронирование</p>
+        <h3 class="modal-quest-name" id="modalQuestName">—</h3>
+      </div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="price-table" aria-label="Таблица цен">
+        <div class="price-table-title">💰 Стоимость</div>
+        <div class="price-rows"></div>
+        <div class="price-calc" id="priceCalc" aria-live="polite">Итого: —</div>
+      </div>
+      <div id="birthdayNote" style="background:linear-gradient(135deg,#1a0a00,#2a1400);border:1px solid #c9a84c;border-left:3px solid #c9a84c;padding:12px 14px;margin-bottom:16px;font-size:.8rem;color:#d4b870;line-height:1.6;">
+        🎂 <strong>У тебя день рождения?</strong> От 5 человек именинник бесплатно. Срок ±2 дня и с собой документ.
+      </div>
+      <div class="form-row-2">
+        <div class="fgroup"><label class="flabel" for="fName">Ваше имя *</label><input type="text" class="finput" id="fName" placeholder="Имя" autocomplete="given-name" /></div>
+        <div class="fgroup"><label class="flabel" for="fPhone">Телефон *</label><input type="tel" class="finput" id="fPhone" placeholder="+7 (___) ___-__-__" maxlength="18" oninput="formatPhone(this)" autocomplete="tel" /></div>
+      </div>
+      <div class="form-row-2">
+        <div class="fgroup"><label class="flabel" for="fDate">Дата *</label><input type="date" class="finput" id="fDate" /></div>
+        <div class="fgroup"><label class="flabel" for="fTime">Время *</label>
+          <select class="finput" id="fTime">
+            <option value="">Время</option>
+            <option>10:00</option><option>11:00</option><option>12:00</option><option>13:00</option><option>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option><option>19:00</option><option>20:00</option><option>21:00</option><option>22:00</option><option>23:00</option><option>00:00</option><option>01:00</option><option>02:00</option><option>03:00</option>
+          </select>
+        </div>
+      </div>
+      <div class="fgroup"><label class="flabel" for="fPlayers">Количество игроков *</label><select class="finput" id="fPlayers" onchange="updatePrice()"><option value="">Выберите</option></select></div>
+      <div class="fgroup"><label class="flabel" for="fComment">Комментарий</label><input type="text" class="finput" id="fComment" placeholder="Пожелания или вопрос администратору..." /></div>
+      <label class="form-checkbox-wrapper">
+        <input type="checkbox" id="agreeCheck" name="accept_offer" required>
+        <span class="form-note">Нажимая кнопку, вы принимаете <a href="oferta.html" target="_blank">публичную оферту</a>. Оплата через Kaspi Pay при подтверждении от администратора.</span>
+      </label>
+      <button class="btn-whatsapp" onclick="sendWhatsApp()">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        Отправить заявку в WhatsApp
+      </button>
+      <a href="tel:+77782836670" class="btn-call">📞 Позвонить: 8 (778) 283-66-70</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ МОДАЛКА ПАКЕТОВ ═══ -->
+<div class="modal-overlay" id="modalPackageOverlay" role="dialog" aria-modal="true" aria-labelledby="modalPackageName">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <p class="modal-tag">Бронирование пакета</p>
+        <h3 class="modal-quest-name" id="modalPackageName">—</h3>
+      </div>
+      <button class="modal-close" onclick="closePackageModal()" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="price-table">
+        <div class="price-table-title">🎂 Пакет включает</div>
+        <div class="price-calc price-calc-active" id="packageInfo">—</div>
+      </div>
+      <div class="form-row-2">
+        <div class="fgroup"><label class="flabel" for="pName">Ваше имя *</label><input type="text" class="finput" id="pName" placeholder="Имя" autocomplete="given-name" /></div>
+        <div class="fgroup"><label class="flabel" for="pPhone">Телефон *</label><input type="tel" class="finput" id="pPhone" placeholder="+7 (___) ___-__-__" maxlength="18" oninput="formatPhone(this)" autocomplete="tel" /></div>
+      </div>
+      <div class="form-row-2">
+        <div class="fgroup"><label class="flabel" for="pDate">Дата *</label><input type="date" class="finput" id="pDate" /></div>
+        <div class="fgroup"><label class="flabel" for="pTime">Время *</label>
+          <select class="finput" id="pTime">
+            <option value="">Время</option>
+            <option>10:00</option><option>12:00</option><option>14:00</option><option>16:00</option><option>17:00</option><option>18:00</option><option>19:00</option><option>20:00</option><option>21:00</option>
+          </select>
+        </div>
+      </div>
+      <div class="fgroup"><label class="flabel" for="pGuests">Количество гостей *</label><select class="finput" id="pGuests"><option value="">Выберите</option></select></div>
+      <div class="fgroup">
+        <label class="flabel" for="pBirthday">День рождения именинника</label>
+        <input type="date" class="finput" id="pBirthday" />
+        <p style="font-size:.72rem;color:#555;margin-top:5px">🎉 Именинник играет бесплатно при группе от 5 человек (±2 дня, при себе документ)</p>
+      </div>
+      <div class="fgroup"><label class="flabel" for="pComment">Вопрос / Комментарий</label><input type="text" class="finput" id="pComment" placeholder="Пожелания или вопрос администратору..." /></div>
+      <label class="form-check"><input type="checkbox" id="pAgreeCheck" /><span>Я принимаю <a href="oferta.html" target="_blank">публичную оферту</a></span></label>
+      <button class="btn-whatsapp" onclick="sendPackageWhatsApp()">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        Отправить заявку в WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="static/js/quests.js"></script>
+<script src="static/js/main.js"></script>
+<script>
+// ══════════════════════════════════════════
+// BOTTOM-SHEET: заменяем модалку на мобиле
+// ══════════════════════════════════════════
+function openBookingSheet(questName) {
+  // На мобиле — bottom-sheet, на десктопе — обычная модалка
+  if (window.innerWidth < 600) {
+    const sheet = document.getElementById('bookingSheet');
+    const overlay = document.getElementById('bookingSheetOverlay');
+    if (!sheet || !overlay) { openModal(questName); return; }
+    // Заполняем заголовок
+    document.getElementById('sheetQuestName').textContent = questName;
+    // Копируем логику openModal
+    openModal(questName);
+    // Дополнительно показываем sheet overlay
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  } else {
+    openModal(questName);
+  }
+}
+
+function closeBookingSheet() {
+  document.getElementById('bookingSheetOverlay')?.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Свайп вниз для закрытия bottom-sheet
+(function() {
+  let startY = 0;
+  const sheet = document.querySelector('.bottom-sheet');
+  if (!sheet) return;
+  sheet.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, { passive: true });
+  sheet.addEventListener('touchend', e => {
+    if (e.changedTouches[0].clientY - startY > 80) closeBookingSheet();
+  }, { passive: true });
+})();
+
+// ══════════════════════════════════════════
+// SCROLL REVEAL (Intersection Observer)
+// ══════════════════════════════════════════
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ══════════════════════════════════════════
+// COUNTER ANIMATION (щёлкающие цифры)
+// ══════════════════════════════════════════
+function animateCounter(el) {
+  const target = parseInt(el.dataset.count, 10);
+  const suffix = el.dataset.suffix || '';
+  const duration = 1400;
+  const start = performance.now();
+
+  function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    // easeOutExpo
+    const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+    const current = Math.round(eased * target);
+    el.textContent = current + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+// Запускаем счётчики когда hero-stats попадает в экран
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('[data-count]').forEach(animateCounter);
+      statsObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+const heroStats = document.querySelector('.hero-stats');
+if (heroStats) statsObserver.observe(heroStats);
+</script>
+</body>
+</html>
