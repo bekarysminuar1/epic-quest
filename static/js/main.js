@@ -425,7 +425,7 @@ function renderQuestPage() {
     `;
   }
 
-  // Мета на странице квеста — разделяем иконки
+  // Мета на странице квеста — разделяем иконки 
   const metaPlayers = q.id === 'emotions' ? '2 или 4 игрока' : `${q.players} игроков`;
   const durationLabel = q.id === 'emotions' ? '90 минут' : `${q.duration} минут`;
 
