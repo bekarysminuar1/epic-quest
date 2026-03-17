@@ -7,8 +7,14 @@
   <meta name="description" content="Детальная страница квеста Epic Quest Astana" />
   <link rel="stylesheet" href="static/css/main.css" />
   <link rel="icon" type="image/png" href="static/img/logo.png" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C5F29H3LT9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-C5F29H3LT9');
+  </script>
   <style>
-    /* ── КРАСНАЯ КНОПКА «ЗАБРОНИРОВАТЬ» В НАВБАРЕ ── */
     .btn-book-nav {
       display: inline-flex;
       align-items: center;
@@ -32,8 +38,7 @@
     }
     .btn-book-nav::before {
       content: '';
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background: linear-gradient(135deg, rgba(255,255,255,.15) 0%, transparent 60%);
       pointer-events: none;
     }
@@ -43,71 +48,21 @@
       box-shadow: 0 0 32px rgba(255,30,30,.7), 0 4px 16px rgba(0,0,0,.5);
     }
     .btn-book-nav:active { transform: scale(.96); }
-
     @keyframes bookPulse {
       0%, 100% { box-shadow: 0 0 16px rgba(220,20,20,.45), 0 2px 8px rgba(0,0,0,.4); }
       50%       { box-shadow: 0 0 36px rgba(255,30,30,.8), 0 2px 8px rgba(0,0,0,.4); }
     }
-
-    /* ── STICKY КНОПКА СНИЗУ НА МОБИЛЕ ── */
-    .sticky-book-bar {
-      display: none;
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      z-index: 1500;
-      padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
-      background: linear-gradient(to top, rgba(4,4,4,.98) 60%, transparent);
-    }
-    @media (max-width: 680px) {
-      .sticky-book-bar { display: block; }
-    }
-    .sticky-book-btn {
-      width: 100%;
-      background: linear-gradient(135deg, #e01010 0%, #b30000 100%);
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      font-family: 'Oswald', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      padding: 16px;
-      border-radius: 4px;
-      box-shadow: 0 0 28px rgba(220,20,20,.5);
-      animation: bookPulse 2s ease-in-out infinite;
-    }
-
-    /* ── ТИПОГРАФИКА: лид-абзац на странице квеста ── */
     .qpage-desc p:first-child {
-      font-size: 1.08rem;
-      color: #bbb;
-      line-height: 1.75;
-      font-weight: 400;
-      margin-bottom: 18px;
+      font-size: 1.08rem; color: #bbb; line-height: 1.75; font-weight: 400; margin-bottom: 18px;
     }
     .qpage-desc p:first-child::first-letter {
-      float: left;
-      font-family: 'Oswald', sans-serif;
-      font-size: 3.8rem;
-      font-weight: 700;
-      line-height: .75;
-      padding: 4px 10px 0 0;
-      color: #cc1111;
+      float: left; font-family: 'Oswald', sans-serif; font-size: 3.8rem;
+      font-weight: 700; line-height: .75; padding: 4px 10px 0 0; color: #cc1111;
     }
   </style>
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C5F29H3LT9"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-C5F29H3LT9');
-  </script>
 </head>
 <body>
 
-<!-- ПЛАВАЮЩИЕ КНОПКИ -->
 <div class="float-btns">
   <a href="https://wa.me/77782836670?text=Хочу%20сыграть%20😈" target="_blank" rel="noopener" class="float-btn float-wa" title="WhatsApp">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
@@ -117,7 +72,6 @@
   </a>
 </div>
 
-<!-- ═══ НАВИГАЦИЯ ═══ -->
 <nav id="navbar" role="navigation" aria-label="Главное меню">
   <a href="index.html" class="logo" aria-label="Epic Quest — на главную">
     <img src="static/img/logo.webp" alt="Epic Quest Astana" class="logo-img" width="160" height="50" />
@@ -166,28 +120,18 @@
         <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
       </a>
     </div>
-    <!-- ✅ КРАСНАЯ КНОПКА — одинаковая на всех страницах -->
     <button class="btn-book-nav" onclick="openModal(currentQuestName)" aria-label="Забронировать квест">
       🔥 Забронировать
     </button>
   </div>
 </nav>
 
-<!-- ═══ КОНТЕНТ СТРАНИЦЫ КВЕСТА ═══ -->
 <div id="questPage"></div>
 
-<!-- ═══ STICKY КНОПКА НА МОБИЛЕ ═══ -->
-<div class="sticky-book-bar">
-  <button class="sticky-book-btn" onclick="openModal(currentQuestName)">
-    🔥 Забронировать
-  </button>
-</div>
-
-<!-- ═══ ФУТЕР ═══ -->
 <footer role="contentinfo">
   <div class="footer-left">
     <img src="static/img/logo.webp" alt="Epic Quest Astana" class="logo-img" width="160" height="50" />
-    <p>© 2016–2026 Epic Quest Astana</p>
+    <p>Epic Quest Astana</p>
   </div>
   <div class="footer-socials">
     <a href="https://www.instagram.com/epic_quest_kz" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
@@ -199,7 +143,6 @@
   </div>
 </footer>
 
-<!-- ═══ МОДАЛКА БРОНИРОВАНИЯ ═══ -->
 <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalQuestName">
   <div class="modal">
     <div class="modal-header">
@@ -265,16 +208,15 @@
         <input type="checkbox" id="agreeCheck" name="accept_offer" required>
         <span class="form-note">
           Нажимая кнопку, вы принимаете <a href="oferta.html" target="_blank">публичную оферту</a>.
-          Оплата через Kaspi Pay при подтверждении от администратора.
+          Оплата на месте.
         </span>
       </label>
       <button class="btn-whatsapp" onclick="sendWhatsApp()">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
         Отправить заявку в WhatsApp
       </button>
-      <a href="tel:+77782836670" class="btn-call">
-        📞 Позвонить: 8 (778) 283-66-70
-      </a>
+      <a href="tel:+77782836670" class="btn-call">📞 Позвонить: 8 (778) 283-66-70</a>
+      <button onclick="closeModal()" class="btn-call" style="margin-top:8px;cursor:pointer;border:1px solid #333;background:transparent;color:#555;font-family:'Oswald',sans-serif;font-size:.85rem;letter-spacing:2px;text-transform:uppercase;">✕ Закрыть</button>
     </div>
   </div>
 </div>
