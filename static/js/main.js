@@ -1,55 +1,110 @@
 // ═══════════════════════════════════════════════════════
-//  main.js — Epic Quest Astana  (ОБНОВЛЁННАЯ ВЕРСИЯ)
+//  main.js — Epic Quest (Астана + Актобе)
 // ═══════════════════════════════════════════════════════
 
-// ── КОНСТАНТЫ ──────────────────────────────────────────
 const WA_NUMBER = '77782836670';
-const PRICE_MAP = { 2: 14000, 3: 15000, 4: 18000 };
-const LATE_HOUR = 21;
+const LATE_HOUR_ASTANA = 21;
+const LATE_HOUR_AKTOBE = 20;
 
-// Лимиты игроков по квестам (id → maxPlayers)
+const PRICES_ASTANA = { 2: 14000, 3: 15000, 4: 18000 };
+const PRICES_AKTOBE = { 2: 8000, 3: 9000, 4: 12000 };
+
+function getAktobePrice(players) {
+  if (!players || players < 2) return 0;
+  if (PRICES_AKTOBE[players]) return PRICES_AKTOBE[players];
+  return players * 2500;
+}
+
 const QUEST_PLAYER_LIMITS = {
-  'traditions':  7,   // МТ
-  'astral':      10,  // Астрал
-  'saw':         10,  // Пила
-  'poltergeist': 15,  // Полтер
-  'granny':      10,  // Гренни
-  'stranger':    15,  // ОСД 2
-  'squid':       10,  // Игра в кальмара
+  'traditions': 7, 'astral': 10, 'saw': 10,
+  'poltergeist': 15, 'granny': 10, 'stranger': 15,
+  'squid': 10, 'hostel666': 15, 'experiment_astral': 15,
 };
 
-// ── НАВИГАЦИЯ ──────────────────────────────────────────
+// ── ГОРОД ──────────────────────────────────────────────
+function getCurrentCity() {
+  return localStorage.getItem('epic_city') || 'astana';
+}
+
+function setCurrentCity(city) {
+  if (city !== 'astana' && city !== 'aktobe') return;
+  localStorage.setItem('epic_city', city);
+  applyCityToUI(city);
+  renderQuestCards();
+  renderPackagesForCity(city);
+  updateContactsForCity(city);
+  updateCityToggleUI(city);
+}
+
+function applyCityToUI(city) {
+  const heroTag = document.querySelector('.hero-tag');
+  if (heroTag) {
+    heroTag.textContent = city === 'aktobe'
+      ? 'Актобе · на рынке с 2016 года, построили 24 квеста'
+      : 'Астана · на рынке с 2016 года, построили 24 квеста';
+  }
+  // Число квестов в hero-stats: 10 для обоих городов
+  const questCountEl = document.querySelector('.hero-stat [data-count]');
+  if (questCountEl) {
+    questCountEl.textContent = '10';
+    questCountEl.dataset.count = '10';
+  }
+}
+
+function updateCityToggleUI(city) {
+  document.querySelectorAll('.city-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.city === city);
+  });
+}
+
+function updateContactsForCity(city) {
+  const cfg = (typeof CITIES !== 'undefined') ? CITIES[city] : null;
+  if (!cfg) return;
+  const hoursEl = document.querySelector('[data-city-hours]');
+  if (hoursEl) hoursEl.textContent = cfg.hours;
+  const addrEl = document.querySelector('[data-city-address]');
+  if (addrEl) addrEl.textContent = cfg.address;
+}
+
 window.addEventListener('scroll', () => {
   document.getElementById('navbar')?.classList.toggle('solid', window.scrollY > 50);
 }, { passive: true });
 
-// Кнопка «наверх»
 window.addEventListener('scroll', () => {
   document.getElementById('btnTop')?.classList.toggle('is-visible', window.scrollY > 400);
 }, { passive: true });
 
 // ── УТИЛИТЫ ────────────────────────────────────────────
-function calcPrice(players, timeStr, questName = '') {
+function calcPrice(players, timeStr, questName = '', city = null) {
   if (!players || players < 2) return 0;
+  city = city || getCurrentCity();
+
   if (questName === 'Дом Эмоций: Комната Любви и Примирения') {
     if (players === 2) return 25000;
     if (players === 4) return 35000;
     return 0;
   }
-  const base = PRICE_MAP[players] ?? players * 4000;
-  const late = (players <= 3) && isLateTime(timeStr) ? 4000 : 0;
+
+  if (city === 'aktobe') {
+    const base = getAktobePrice(players);
+    const lateExtra = (players <= 3) && isLateTime(timeStr, city) ? 3000 : 0;
+    return base + lateExtra;
+  }
+
+  const base = PRICES_ASTANA[players] ?? players * 4000;
+  const late = (players <= 3) && isLateTime(timeStr, city) ? 4000 : 0;
   return base + late;
 }
 
-function isLateTime(timeStr) {
+function isLateTime(timeStr, city = null) {
   if (!timeStr) return false;
+  city = city || getCurrentCity();
+  const lateHour = city === 'aktobe' ? LATE_HOUR_AKTOBE : LATE_HOUR_ASTANA;
   const [h] = timeStr.split(':').map(Number);
-  return h >= LATE_HOUR || h < 4;
+  return h >= lateHour || h < 4;
 }
 
-function fmt(n) {
-  return n.toLocaleString('ru-RU');
-}
+function fmt(n) { return n.toLocaleString('ru-RU'); }
 
 function playersLabel(n) {
   if (n === 1) return 'игрок';
@@ -72,19 +127,32 @@ function buildOptions(select, min, max, label) {
   }
 }
 
-// ── РЕНДЕР КАРТОЧЕК НА ГЛАВНОЙ ─────────────────────────
+function getMinPriceForQuest(q) {
+  if (q.id === 'emotions') return '25 000';
+  if (q.city === 'aktobe') return '8 000';
+  return '14 000';
+}
+
+// ── РЕНДЕР КАРТОЧЕК ────────────────────────────────────
 function renderQuestCards() {
   const grid = document.getElementById('questsGrid');
   if (!grid) return;
 
-  grid.innerHTML = QUESTS.map(q => {
-    const minPrice = q.id === 'emotions' ? '25 000' : '14 000';
-    // Разделяем иконки игроков и возраста (исправление путаницы)
+  const city = getCurrentCity();
+  const filteredQuests = QUESTS.filter(q => q.city === city);
+
+  if (filteredQuests.length === 0) {
+    grid.innerHTML = '<p style="text-align:center;color:#666;padding:40px;">Квесты в этом городе скоро появятся</p>';
+    return;
+  }
+
+  grid.innerHTML = filteredQuests.map(q => {
+    const minPrice = getMinPriceForQuest(q);
     return `
     <article class="quest-card" role="listitem" onclick="location.href='quest.html?id=${q.id}'" aria-label="${q.name}">
       <div class="qcard-img">
         <img src="${q.img}" alt="${q.name}" loading="lazy" onerror="this.parentElement.style.background='#1a0505'">
-        <div class="qcard-overlay" aria-hidden="true"></div>
+        <div class="qcard-overlay"></div>
         <span class="qcard-tag" style="background:${q.tagColor}">${q.tag}</span>
       </div>
       <div class="qcard-body">
@@ -94,13 +162,10 @@ function renderQuestCards() {
         <div class="qcard-meta">
           <span class="qcard-meta-item"><span class="qcard-meta-icon">👥</span> ${q.players}</span>
           <span class="qcard-meta-item"><span class="qcard-meta-icon">⏱</span> ${q.duration} мин</span>
-
         </div>
         <div class="qcard-footer">
           <span class="qcard-price">от <strong>${minPrice} ₸</strong></span>
-          <button class="btn-card-book" onclick="event.stopPropagation(); openModal('${q.name}')" aria-label="Забронировать ${q.name}">
-            Забронировать
-          </button>
+          <button class="btn-card-book" onclick="event.stopPropagation(); openModal('${q.name}')">Забронировать</button>
         </div>
       </div>
     </article>
@@ -124,24 +189,74 @@ const cardObserver = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.1 });
 
-// ── МОДАЛКА КВЕСТА ──────────────────────────────────────
+// ── ПАКЕТЫ ─────────────────────────────────────────────
+const PACKAGES = {
+	'ЛЕГЕНДА': { city: 'astana', price_week: 130000, price_weekend: 180000, max: 15, duration: '4 часа', extra: 7500,
+    items: ['Квест «Очень Странные Дела 2»', 'Квест «Бабушка Грэнни»', 'Шоу программа с ведущим и ди-джеем — 6 весёлых игр от @epik_show', 'Настольные игры, Мафия, Прятки в темноте', 'Эпичное поздравление / вынос торта', 'Фуршет с вашей едой', 'Электронные пригласительные', 'Полная аренда 3-х этажного коттеджа', 'Мобилограф'] },
+  'ПРАЙМ':   { city: 'astana', price_week: 99000,  price_weekend: 120000, max: 10, duration: '3 часа', extra: 5000,
+    items: ['Квест «Очень Странные Дела 2»', 'Квест «Бабушка Грэнни»', 'Настольные игры', 'Эпичный вынос торта', 'Фуршет с вашей едой', 'Электронные пригласительные', 'Полная аренда 3-х этажного коттеджа', 'Мобилограф'] },
+  'ПОЛТЕР':  { city: 'astana', price_week: 89000,  price_weekend: 110000, max: 15, duration: '3 часа',
+    items: ['Квест «Полтергейст»', 'Квест «Побег из Астрала»', 'Настольные игры', 'Эпичный вынос торта', 'Электронные пригласительные', 'Полная аренда помещения', 'Мобилограф'] },
+  'ПИЛА':    { city: 'astana', price_week: 56000,  price_weekend: 70000,  max: 10, duration: '2 часа',
+    items: ['Квест «Пила»', 'Настольные игры', 'Эпичный вынос торта', 'Электронные пригласительные', 'Полная аренда помещения', 'Мобилограф'] },
+  'МТ':      { city: 'astana', price_week: 56000,  price_weekend: 70000,  max: 7,  duration: '2 часа',
+    items: ['Квест «Мрачные Традиции»', 'Настольные игры', 'Эпичный вынос торта', 'Электронные пригласительные', 'Полная аренда помещения', 'Мобилограф'] },
+  'ПРАЙМ_АКТОБЕ':   { city: 'aktobe', price_week: 75000,  price_weekend: 99000,  max: 10, duration: '3 часа', extra: 4000, displayName: 'ПРАЙМ',
+    items: ['Квест «Эксперимент Астрал»', 'Квест «HOSTEL 666»', 'Настольные игры', 'Эпичный вынос торта', 'Фуршет с вашей едой', 'Электронные пригласительные', 'Полная аренда 400 кв метров', 'Мобилограф'] },
+  'ЛЕГЕНДА_АКТОБЕ': { city: 'aktobe', price_week: 99000,  price_weekend: 140000, max: 15, duration: '4 часа', extra: 5000, displayName: 'ЛЕГЕНДА',
+    items: ['Квест «Эксперимент Астрал»', 'Квест «HOSTEL 666»', 'Шоу программа с ведущим и ди-джеем — 6 весёлых игр от @epik_show', 'Настольные игры, Мафия, Прятки в темноте', 'Эпичное поздравление / вынос торта', 'Фуршет с вашей едой', 'Электронные пригласительные', 'Полная аренда 400 кв метров', 'Мобилограф'] }
+};
+
+function renderPackagesForCity(city) {
+  const grid = document.getElementById('packagesGrid');
+  if (!grid) return;
+
+  const filtered = Object.entries(PACKAGES).filter(([_, p]) => p.city === city);
+
+  grid.innerHTML = filtered.map(([key, pkg]) => {
+    const isGold = key.startsWith('ПРАЙМ');
+    const isLegend = key.startsWith('ЛЕГЕНДА');
+    const cardClass = isGold ? 'pkg-card pkg-card-gold' : isLegend ? 'pkg-card pkg-card-legend' : 'pkg-card';
+    const displayName = pkg.displayName || key;
+    const extraLine = pkg.extra ? `<span class="pkg-meta-extra">➕ Доп. места: ${fmt(pkg.extra)} тг/чел</span>` : '';
+
+    return `
+      <div class="${cardClass}">
+        <div class="pkg-header">ПАКЕТ: ${displayName}</div>
+        <ul class="pkg-list">
+          ${pkg.items.map(item => `<li>${item}</li>`).join('')}
+        </ul>
+        <div class="pkg-meta">
+          <span>Длительность: ${pkg.duration} · До ${pkg.max} чел</span>
+          ${extraLine}
+        </div>
+        <div class="pkg-prices">
+          <div class="pkg-price-row">Будние: <strong>${fmt(pkg.price_week)} тг</strong></div>
+          <div class="pkg-price-row pkg-weekend">Выходные: <strong>${fmt(pkg.price_weekend)} тг</strong></div>
+        </div>
+        <button class="btn-pkg" onclick="openPackageModal('${key}')">Забронировать</button>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── МОДАЛКА КВЕСТА ─────────────────────────────────────
 function openModal(questName) {
   const q = QUESTS.find(x => x.name === questName);
   if (!q) return;
 
-  // Дом Эмоций — открываем отдельную страницу
   if (q.id === 'emotions') {
     window.location.href = 'emotions-booking.html';
     return;
   }
 
+  const city = q.city;
   document.getElementById('modalQuestName').textContent = questName;
 
   const playersSelect = document.getElementById('fPlayers');
   const overlay = document.getElementById('modalOverlay');
   const priceRowsContainer = overlay ? overlay.querySelector('.price-rows') : null;
 
-  // Лимит игроков для конкретного квеста
   const maxP = QUEST_PLAYER_LIMITS[q.id] ?? q.maxPlayers ?? 20;
 
   playersSelect.innerHTML = '<option value="">Выберите</option>';
@@ -152,14 +267,26 @@ function openModal(questName) {
     playersSelect.appendChild(opt);
   }
 
+  overlay.dataset.city = city;
+
   if (priceRowsContainer) {
-    priceRowsContainer.innerHTML = `
-      <div class="price-row"><span>2 человека</span><span class="price-val">14 000 ₸</span></div>
-      <div class="price-row"><span>3 человека</span><span class="price-val">15 000 ₸</span></div>
-      <div class="price-row"><span>4 человека</span><span class="price-val">18 000 ₸</span></div>
-      <div class="price-row"><span>5–${maxP} человек</span><span class="price-val">4 000 ₸/чел</span></div>
-      <div class="price-row price-row-note"><span>⏰ После 21:00 (2–3 чел.)</span><span class="price-val">+4 000 ₸</span></div>
-    `;
+    if (city === 'aktobe') {
+      priceRowsContainer.innerHTML = `
+        <div class="price-row"><span>2 человека</span><span class="price-val">8 000 ₸</span></div>
+        <div class="price-row"><span>3 человека</span><span class="price-val">9 000 ₸</span></div>
+        <div class="price-row"><span>4 человека</span><span class="price-val">12 000 ₸</span></div>
+        <div class="price-row"><span>5–${maxP} человек</span><span class="price-val">2 500 ₸/чел</span></div>
+        <div class="price-row price-row-note"><span>⏰ После 20:00 (2–3 чел.)</span><span class="price-val">+3 000 ₸</span></div>
+      `;
+    } else {
+      priceRowsContainer.innerHTML = `
+        <div class="price-row"><span>2 человека</span><span class="price-val">14 000 ₸</span></div>
+        <div class="price-row"><span>3 человека</span><span class="price-val">15 000 ₸</span></div>
+        <div class="price-row"><span>4 человека</span><span class="price-val">18 000 ₸</span></div>
+        <div class="price-row"><span>5–${maxP} человек</span><span class="price-val">4 000 ₸/чел</span></div>
+        <div class="price-row price-row-note"><span>⏰ После 21:00 (2–3 чел.)</span><span class="price-val">+4 000 ₸</span></div>
+      `;
+    }
   }
 
   document.getElementById('priceCalc').textContent = 'Выберите количество игроков';
@@ -175,31 +302,20 @@ function openModal(questName) {
   dateInput.min = today;
   if (!dateInput.value) dateInput.value = today;
 
-  // Показываем подсказку для именинников
   const bdayNote = document.getElementById('birthdayNote');
   if (bdayNote) bdayNote.style.display = 'block';
 
   openOverlay('modalOverlay');
 }
 
-function closeModal() {
-  closeOverlay('modalOverlay');
-}
+function closeModal() { closeOverlay('modalOverlay'); }
 
-// ── МОДАЛКА ПАКЕТОВ ─────────────────────────────────────
-const PACKAGES = {
-  'ПОЛТЕР':  { price_week: 89000,  price_weekend: 110000, max: 15 },
-  'ПИЛА':    { price_week: 56000,  price_weekend: 70000,  max: 10 },
-  'МТ':      { price_week: 56000,  price_weekend: 70000,  max: 7  },
-  'ПРАЙМ':   { price_week: 99000,  price_weekend: 120000, max: 10 },
-  'ЛЕГЕНДА': { price_week: 130000, price_weekend: 180000, max: 15 }
-};
-
-function openPackageModal(pkgName) {
-  const pkg = PACKAGES[pkgName];
+function openPackageModal(pkgKey) {
+  const pkg = PACKAGES[pkgKey];
   if (!pkg) return;
 
-  document.getElementById('modalPackageName').textContent = 'Пакет: ' + pkgName;
+  const displayName = pkg.displayName || pkgKey;
+  document.getElementById('modalPackageName').textContent = 'Пакет: ' + displayName;
   document.getElementById('packageInfo').textContent =
     `Будние: ${fmt(pkg.price_week)} тг  |  Выходные: ${fmt(pkg.price_weekend)} тг  |  До ${pkg.max} человек`;
 
@@ -215,25 +331,23 @@ function openPackageModal(pkgName) {
   document.getElementById('pComment').value = '';
   document.getElementById('pAgreeCheck').checked = false;
 
+  document.getElementById('modalPackageOverlay').dataset.pkgKey = pkgKey;
+  document.getElementById('modalPackageOverlay').dataset.city = pkg.city;
+
   openOverlay('modalPackageOverlay');
 }
 
-function closePackageModal() {
-  closeOverlay('modalPackageOverlay');
-}
+function closePackageModal() { closeOverlay('modalPackageOverlay'); }
 
-// ── ОБЩИЕ ХЕЛПЕРЫ ДЛЯ МОДАЛОК ──────────────────────────
 function openOverlay(id) {
   document.getElementById(id).classList.add('active');
   document.body.style.overflow = 'hidden';
 }
-
 function closeOverlay(id) {
   document.getElementById(id).classList.remove('active');
   document.body.style.overflow = '';
 }
 
-// ── ФОРМАТИРОВАНИЕ ТЕЛЕФОНА ──────────────────────────────
 function formatPhone(input) {
   let v = input.value.replace(/\D/g, '');
   if (!v) { input.value = ''; input.style.borderColor = ''; return; }
@@ -256,9 +370,9 @@ function formatPhone(input) {
   input.style.borderColor = digits.length >= 11 ? '#2a7a3a' : '#cc1111';
 }
 
-// ── РАСЧЁТ ЦЕНЫ ──────────────────────────────────────────
 function updatePrice() {
   const questName = document.getElementById('modalQuestName').textContent;
+  const city = document.getElementById('modalOverlay').dataset.city || 'astana';
   const players = parseInt(document.getElementById('fPlayers').value) || 0;
   const time = document.getElementById('fTime')?.value || '';
   const calc = document.getElementById('priceCalc');
@@ -270,15 +384,22 @@ function updatePrice() {
     return;
   }
 
-  const total = calcPrice(players, time, questName);
+  const total = calcPrice(players, time, questName, city);
   const isEmotions = questName === 'Дом Эмоций: Комната Любви и Примирения';
-  const extra = (!isEmotions && isLateTime(time) && players <= 3) ? 4000 : 0;
+  let extraLabel = '';
 
-  calc.textContent = `💰 Итого: ${fmt(total)} ₸${extra ? ` (+4 000 ₸ после ${LATE_HOUR}:00)` : ''}`;
+  if (!isEmotions && isLateTime(time, city) && players <= 3) {
+    if (city === 'aktobe') {
+      extraLabel = ` (+3 000 ₸ после 20:00)`;
+    } else {
+      extraLabel = ` (+4 000 ₸ после 21:00)`;
+    }
+  }
+
+  calc.textContent = `💰 Итого: ${fmt(total)} ₸${extraLabel}`;
   calc.className = 'price-calc price-calc-active';
 }
 
-// ── ВАЛИДАЦИЯ ───────────────────────────────────────────
 function validateFields(fields) {
   for (const { id, check, msg } of fields) {
     const el = document.getElementById(id);
@@ -303,7 +424,6 @@ const PKG_FIELDS = [
   { id: 'pGuests', check: v => v.length > 0,                    msg: 'Выберите количество гостей' },
 ];
 
-// ── ОТПРАВКА В WHATSAPP — КВЕСТ ─────────────────────────
 function sendWhatsApp() {
   const err = validateFields(QUEST_FIELDS);
   if (err) { showError('fError', 'modalOverlay', err); return; }
@@ -312,19 +432,20 @@ function sendWhatsApp() {
   if (agree && !agree.checked) { showError('fError', 'modalOverlay', 'Примите публичную оферту'); return; }
 
   const quest   = document.getElementById('modalQuestName').textContent;
+  const city    = document.getElementById('modalOverlay').dataset.city || 'astana';
+  const cityName = city === 'aktobe' ? 'Актобе' : 'Астане';
   const name    = document.getElementById('fName').value.trim();
   const phone   = document.getElementById('fPhone').value.trim();
   const date    = document.getElementById('fDate').value;
   const time    = document.getElementById('fTime').value;
   const players = parseInt(document.getElementById('fPlayers').value);
   const comment = document.getElementById('fComment').value.trim();
-  const price   = calcPrice(players, time, quest);
-  const dateStr = formatDate(date);
+  const price   = calcPrice(players, time, quest, city);
 
-  let msg = `*Здравствуйте, хочу забронировать квест*\n\n`;
+  let msg = `*Здравствуйте, хочу забронировать ЭПИЧНУЮ ИГРУ в ${cityName}!*\n\n`;
   msg += `Квест: *${quest}*\n`;
   msg += `Имя: ${name}\nТелефон: ${phone}\n`;
-  msg += `Дата: ${dateStr}\nВремя: ${time}\nИгроков: ${players}\n`;
+  msg += `Дата: ${formatDate(date)}\nВремя: ${time}\nИгроков: ${players}\n`;
   msg += `Стоимость: ${fmt(price)} тг\n`;
   if (comment) msg += `Комментарий: ${comment}\n`;
   msg += `\nС офертой ознакомлен(-а).`;
@@ -333,7 +454,6 @@ function sendWhatsApp() {
   setTimeout(() => closeModal(), 500);
 }
 
-// ── ОТПРАВКА В WHATSAPP — ПАКЕТ ─────────────────────────
 function sendPackageWhatsApp() {
   const err = validateFields(PKG_FIELDS);
   if (err) { showError('pkgError', 'modalPackageOverlay', err); return; }
@@ -342,6 +462,8 @@ function sendPackageWhatsApp() {
   if (agree && !agree.checked) { showError('pkgError', 'modalPackageOverlay', 'Примите публичную оферту'); return; }
 
   const pkg     = document.getElementById('modalPackageName').textContent;
+  const city    = document.getElementById('modalPackageOverlay').dataset.city || 'astana';
+  const cityName = city === 'aktobe' ? 'Актобе' : 'Астане';
   const name    = document.getElementById('pName').value.trim();
   const phone   = document.getElementById('pPhone').value.trim();
   const date    = document.getElementById('pDate').value;
@@ -350,7 +472,7 @@ function sendPackageWhatsApp() {
   const bday    = document.getElementById('pBirthday').value;
   const comment = document.getElementById('pComment').value.trim();
 
-  let msg = `*Здравствуйте, хочу забронировать пакет*\n\n`;
+  let msg = `*Здравствуйте, хочу забронировать пакет в ${cityName}!*\n\n`;
   msg += `${pkg}\n`;
   msg += `Имя: ${name}\nТелефон: ${phone}\n`;
   msg += `Дата: ${formatDate(date)}\nВремя: ${time}\nГостей: ${guests}\n`;
@@ -362,12 +484,10 @@ function sendPackageWhatsApp() {
   setTimeout(() => closePackageModal(), 500);
 }
 
-// ── ХЕЛПЕРЫ ─────────────────────────────────────────────
 function formatDate(dateStr, shortMonth = false) {
   if (!dateStr) return '';
   return new Date(dateStr + 'T00:00:00').toLocaleDateString('ru-RU', {
-    day: 'numeric',
-    month: 'long',
+    day: 'numeric', month: 'long',
     ...(shortMonth ? {} : { year: 'numeric' })
   });
 }
@@ -387,24 +507,24 @@ function showError(elId, overlayId, msg) {
   el._timer = setTimeout(() => { el.style.display = 'none'; }, 4000);
 }
 
-// ── СТРАНИЦА КВЕСТА ──────────────────────────────────────
+// ── СТРАНИЦА КВЕСТА ────────────────────────────────────
 function renderQuestPage() {
   const id = new URLSearchParams(window.location.search).get('id');
   const q = QUESTS.find(x => x.id === id);
   if (!q) { location.href = 'index.html'; return; }
 
-  document.title = `${q.name} — Epic Quest Astana`;
+  if (q.city !== getCurrentCity()) {
+    localStorage.setItem('epic_city', q.city);
+  }
 
+  document.title = `${q.name} — Epic Quest`;
   const container = document.getElementById('questPage');
   if (!container) return;
 
   const levels = q.levels.map((l, i) => `
     <div class="level-item">
-      <div class="level-num" aria-hidden="true">${i + 1}</div>
-      <div class="level-info">
-        <strong>${l.name}</strong>
-        <p>${l.desc}</p>
-      </div>
+      <div class="level-num">${i + 1}</div>
+      <div class="level-info"><strong>${l.name}</strong><p>${l.desc}</p></div>
     </div>`).join('');
   const rules = q.rules.map(r => `<li>${r}</li>`).join('');
 
@@ -412,8 +532,15 @@ function renderQuestPage() {
   if (q.id === 'emotions') {
     sidebarPricesHTML = `
       <div class="sp-row"><span>2 человека</span><strong>25 000 ₸</strong></div>
-      <div class="sp-row"><span>4 человека</span><strong>35 000 ₸</strong></div>
-    `;
+      <div class="sp-row"><span>4 человека</span><strong>35 000 ₸</strong></div>`;
+  } else if (q.city === 'aktobe') {
+    const maxP = QUEST_PLAYER_LIMITS[q.id] ?? q.maxPlayers ?? 15;
+    sidebarPricesHTML = `
+      <div class="sp-row"><span>2 человека</span><strong>8 000 ₸</strong></div>
+      <div class="sp-row"><span>3 человека</span><strong>9 000 ₸</strong></div>
+      <div class="sp-row"><span>4 человека</span><strong>12 000 ₸</strong></div>
+      <div class="sp-row"><span>5–${maxP} человек</span><strong>2 500 ₸/чел</strong></div>
+      <div class="sp-row sp-note"><span>После 20:00 (2–3 чел.)</span><strong>+3 000 ₸</strong></div>`;
   } else {
     const maxP = QUEST_PLAYER_LIMITS[q.id] ?? q.maxPlayers ?? 20;
     sidebarPricesHTML = `
@@ -421,21 +548,16 @@ function renderQuestPage() {
       <div class="sp-row"><span>3 человека</span><strong>15 000 ₸</strong></div>
       <div class="sp-row"><span>4 человека</span><strong>18 000 ₸</strong></div>
       <div class="sp-row"><span>5–${maxP} человек</span><strong>4 000 ₸/чел</strong></div>
-      <div class="sp-row sp-note"><span>После ${LATE_HOUR}:00 (2–3 чел.)</span><strong>+4 000 ₸</strong></div>
-    `;
+      <div class="sp-row sp-note"><span>После 21:00 (2–3 чел.)</span><strong>+4 000 ₸</strong></div>`;
   }
 
-  // Мета на странице квеста — разделяем иконки 
-  const metaPlayers = q.id === 'emotions' ? '2 или 4 игрока' : `${q.players} игроков`;
-  const durationLabel = q.id === 'emotions' ? '90 минут' : `${q.duration} минут`;
-
   container.innerHTML = `
-    <div class="qpage-hero" style="background-image:url('${q.img}')" role="img" aria-label="${q.name}">
-      <div class="qpage-hero-overlay" aria-hidden="true"></div>
+    <div class="qpage-hero" style="background-image:url('${q.img}')">
+      <div class="qpage-hero-overlay"></div>
       <div class="qpage-hero-content">
         <span class="qpage-tag" style="background:${q.tagColor}">${q.tag}</span>
         <h1 class="qpage-title">${q.name}</h1>
-        <p class="qpage-genre">${q.genre}</p>
+        <p class="qpage-genre">${q.genre} · ${q.city === 'aktobe' ? 'Актобе' : 'Астана'}</p>
         <div class="qpage-hero-btns">
           <button class="btn-hero-book" onclick="openModal('${q.name}')">Забронировать</button>
           <a href="${q.map2gis}" target="_blank" rel="noopener" class="btn-hero-map">📍 Смотреть на 2ГИС</a>
@@ -465,7 +587,6 @@ function renderQuestPage() {
     </div>`;
 }
 
-// ── БУРГЕР-МЕНЮ ─────────────────────────────────────────
 function initBurger() {
   const burger = document.getElementById('burgerBtn');
   const navMobile = document.getElementById('navMobile');
@@ -486,10 +607,28 @@ function initBurger() {
   });
 }
 
-// ── INIT ─────────────────────────────────────────────────
+function initCityToggle() {
+  document.querySelectorAll('.city-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const city = btn.dataset.city;
+      setCurrentCity(city);
+    });
+  });
+
+  const current = getCurrentCity();
+  updateCityToggleUI(current);
+  applyCityToUI(current);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('questsGrid')) renderQuestCards();
-  if (document.getElementById('questPage'))  renderQuestPage();
+  initCityToggle();
+
+  if (document.getElementById('questsGrid')) {
+    renderQuestCards();
+    renderPackagesForCity(getCurrentCity());
+    updateContactsForCity(getCurrentCity());
+  }
+  if (document.getElementById('questPage')) renderQuestPage();
   initBurger();
 
   ['modalOverlay', 'modalPackageOverlay'].forEach(id => {
@@ -509,22 +648,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('change', e => {
     if (e.target.id === 'fTime' || e.target.id === 'fPlayers') updatePrice();
   });
-
-  // Счётчик просмотров — кликабельность
-  document.querySelectorAll('.view-counter').forEach(el => {
-    el.style.cursor = 'pointer';
-    el.addEventListener('click', () => {
-      const count = parseInt(el.dataset.count || '0') + 1;
-      el.dataset.count = count;
-      el.textContent = `👁 ${count}`;
-    });
-  });
 });
 
-// ── WHATSAPP С ПОДТВЕРЖДЕНИЕМ ────────────────────────────
-// Перехватываем все ссылки на WhatsApp (плавающая кнопка, футер, соцсети)
 document.addEventListener('DOMContentLoaded', () => {
-  // Находим все WA-ссылки, кроме кнопок отправки формы (у них свой обработчик)
   document.querySelectorAll('a[href*="wa.me"]').forEach(link => {
     link.addEventListener('click', function(e) {
       e.preventDefault();
